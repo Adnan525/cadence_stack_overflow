@@ -38,6 +38,7 @@ def get_question_answer(all_question_blocks: List[dict]) -> List[dict]:
                 all_extracted_answers.append(answer)
 
         q_a_pair = {
+            "title": question_block["title"],
             "question": question,
             "accepted_answer": accepted_answer,
             "all_answers": all_extracted_answers
