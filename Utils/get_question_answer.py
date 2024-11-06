@@ -6,18 +6,28 @@ from Utils.code_formatting import code_formatting
 
 def get_question_answer(all_question_blocks: List[dict]) -> List[dict]:
     q_a_pairs = []
+    no_answer_count = 0
     base_url = "https://stackoverflow.com/"
 
     for question_block in all_question_blocks:
-        if question_block["answer_count"] == 0:
-            print("[INFO] Skipping question with no answers.")
-            continue
         question_page = requests.get(base_url + question_block["link"])
         soup = BeautifulSoup(question_page.text, "html.parser")
 
         # Full question text
         question_html = soup.find("div", class_="s-prose")
         question = code_formatting(question_html)
+
+        # Check if there is no answer
+        if question_block["answer_count"] == 0:
+            q_a_pair = {
+                "title": question_block["title"],
+                "question": question,
+                "accepted_answer": None,
+                "all_answers": None
+            }
+            q_a_pairs.append(q_a_pair)
+            no_answer_count += 1
+            continue
 
         # All answers
         all_answer_html = soup.find("div", id = "answers") # this will pull all answers
@@ -45,4 +55,7 @@ def get_question_answer(all_question_blocks: List[dict]) -> List[dict]:
         }
         q_a_pairs.append(q_a_pair)
 
+    print(f"[INFO] Total questions scraped: {len(q_a_pairs)}")
+    print(f"[INFO] Total questions without answers: {no_answer_count}")
+    print(f"[INFO] Total questions with answers: {len(q_a_pairs) - no_answer_count}")
     return q_a_pairs

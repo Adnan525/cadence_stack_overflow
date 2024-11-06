@@ -2,12 +2,15 @@ import json
 
 from Utils.get_stackoverflow_questions import get_stackoverflow_questions
 from Utils.get_question_answer import get_question_answer
-
-
+from Utils.parse_arguments import parse_arguments
 
 if __name__ == "__main__":
+    args = parse_arguments()
+    tags = "+".join(args.tags) # Stackoverflow handles multiple tags with '+'
+    pages = args.pages
+
     # Get recent Python questions
-    all_question_blocks = get_stackoverflow_questions("cadence", [1, 2, 3])
+    all_question_blocks = get_stackoverflow_questions(tags, pages)
 
     # Get question and answers
     q_a_pairs = get_question_answer(all_question_blocks)

@@ -1,0 +1,10 @@
+# DO NOT USE, FOR TESTING ONLY
+all_question_summary: "s-post-summary"
+question_block: "s-link"
+answer_count_tag: "s-post-summary--stats-item"
+accepted_answer: "has-accepted-answer"
+answer_count_number: "s-post-summary--stats-item-number"
+question_html: "s-prose"
+accepted_answer_class: "accepted-answer"
+answer_cell: "answercell"
+answer_text: "s-prose"

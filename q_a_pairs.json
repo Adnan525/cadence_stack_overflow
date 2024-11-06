@@ -1,5 +1,11 @@
 [
     {
+        "title": "Skill script-How to update new value for dynamically created variable",
+        "question": "I have to check layout properties, for each property found i need to get the value and cell name added in a list or table\nEx:property_l='(\"pl1\" \"pl2\" \"pl3\") foreach(pl property_l set(stringToSymbol(strcat(\"tab_\" stringToSymbol(pl))) makeTable(pl 0))foreach(pl property_l if(pl==pl1 then tab_pl[cvid~>cellname]=cvid~>prop~>value );if );foreachAbove code does not work since it does not evaluate pl in tab_pl, is there a way to evaluate left hand operator?",
+        "accepted_answer": null,
+        "all_answers": null
+    },
+    {
         "title": "Verilog port mapping when a gate netlist module's vector ports instatantiated inside an rtl module have been split into each bit by P&R tool",
         "question": "I have to run an rtl simulation where all the source codes are verilog (system verilog) files but a module of my interest is a gate netlist module. Of course I have to put some wire delays around the instantiated gate netlist module to avoid timing errors. The problem is, the netlist module's input and output ports have been all split into separate bits by the placement and route tool(it went through some ECO operation). So originally the module definition started like :\n```\nmodule abc (\ninput [15:0] a;\noutput [7:0] b;\n..\n```\n\nbut now it has become\n```\nmodule abc (\ninput \\a[15] ;\ninput \\a[14] ;\ninput \\a[13] ;\ninput \\a[12] ;\ninput \\a[11] ;\n...\noutput \\b[7] ;\noutput \\b[6] ;\noutput \\b[5] ;\noutput \\b[4] ;\n...\n```\n\nNow, in the module \"eee\" which instantiates the module \"abc\", I used to have it like\n```\nwire [15:0] sig_a;\nwire [7:0] sig_b;\nabc u_abc (\n.a(sig_a),\n.b(sig_b),\n...\n```\n\nBut I cannot do the same because the compiler complains about it.Port name 'a' of instance 'tb_aaa.bbb.ccc.ddd.eee' is invalid or has\nmultiple connections and the instantiated module is defined in file\nabc_gate.vI tried usinggeneratefor the port mapping of each bit but it looks like verilog doesn't allow generate statements for each group of port mapping. I don't want to modify the netlist. How can I solve this?",
         "accepted_answer": "Some synthesis tools can be configured to preserve module port names such that the synthesized Verilog code matches the RTL code (for the port list).  Refer to the Cadence documentation or contact Cadence.If that is not a possibility, it is standard practice to handle pre-/post-synthesis differences by using Verilog macros.  For example, in your Verilog code, you can define a macro such asGATESto conditionally instantiate theabcmodule:`ifdef GATES\n    abc abc ( /* netlist port names here */ );\n`else\n    abc abc ( /* RTL port names here */ );\n`endif",
@@ -10,6 +16,12 @@
         "question": "Is there a way to write SKILL script where LVS report file (generated in .lvs.report ) can be written to .csv file ?I am trying to write a SKILL script wherein I can copy the lvs.report file data to .csv file\nI want to firstly read the file and then copy the data to a .csv fileI tried using inPort to read the file but it doesnt seem to work.",
         "accepted_answer": "To read a file you can do something like this:inPort = infile( \"filename\" )\nwhile( gets( nextLine inPort )\n    printf(\"%s\" nextLine)\n)\nclose(inPort)To write a file you can do:op=outfile(\"filename\" \"w\")\nfprintf(op \"%s %s\\n\" net1 net2)\nclose(op)",
         "all_answers": []
+    },
+    {
+        "title": "Calculation of DNL, INL of a Flash ADC using cadence virtuoso",
+        "question": "I have designed a 3bit flash ADC, with a supply voltage of 1.2 V.ADCADC wave form. here r0,r1,r2,r3,r4,r5,r6 are the divided reference voltages. b0,b1,b2 are the outputs(3 bit output).Input is a sine wave with 1.2 V amplitude and frequency of 100 kHz. and a reference voltage of 0.5 V.i have designed a flash ADC and now  i have to calculates it's DNL,INL, gain error etc. how to calculate these?",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Cadence detection API for Samsung Galaxy Watch 6 (Wear OS)?",
@@ -40,12 +52,24 @@
         ]
     },
     {
+        "title": "How to check if a signal is toggling after some time in simvision TCL command",
+        "question": "I was working in simvision environment and I was developing to script to check whether a signal is toggling after some time. Could you please let me know if there are TCL command in the simvision console.I was usingwaveform values -at time signalbut it was displaying one value.",
+        "accepted_answer": null,
+        "all_answers": null
+    },
+    {
         "title": "Copying Lists using Keeps in Specman",
         "question": "Currently if I want to generate an identical list to a previously generated one in Specman e I use:\n```\n<'\nstruct A {\n    ListA : list of uint;\n    keep ListA.size() == 5;\n    keep ListA.sum(it) <= 20;\n};\n\nstruct B {\n    ListB : list of uint;\n};\n\nextend sys {\n    A1 : A;\n    B1 : B;\n\n    // Keeps\n    keep B1.B.size() == read_only(A1.A.size());\n    keep for each in B1.B {\n        it == read_only(A1.A[index]);\n    };\n};\n'>\n```\n\nIs there a cleaner way to have this generation? A one line keep?",
         "accepted_answer": null,
         "all_answers": [
             "You could say:\n```\nkeep B1.ListB == A1.ListA.copy();\n```\n\nBut using the generator to create an exact copy is very inefficient. In the end, there is nothing to generate...\nInstead, use a simple assignment.\n```\nextend sys {\n...\npost_generate is also {\n   B1.B = A1.A.copy(); // shallow copy OK for uints, use deep_copy() when appropriate\n   }\n}\n```\n\nDepending on other members, you might not even have to generate B1 at all."
         ]
+    },
+    {
+        "title": "Plotting fmax v/s ID/W (current density) in cadence",
+        "question": "I want to plot a graph of fmax v/s current density in cadence. I plan to use the s-parameter analysis but I am unaware of how to plot the ID/W term on x axis. I would be grateful if anybody could share some details. In the sweep options of the sp analysis I am only allowed to select one parameter, and since both ID and W are from 2 different components, it is hard to figure out. I am sharing a snap of my test bench.Thank youI tried exploring options to plot ID/W term but could not succeed.",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Generating a list in Specman with at least one of each enum",
@@ -101,6 +125,12 @@
         ]
     },
     {
+        "title": "What's backquote meaning in upf writed by tcl?",
+        "question": "I'm seeing upf src code, but I meet the backquote before create_power_domain. I don't understand what's backquote meaning in follow code.(the code is used by clp)\n```\n` create_power_domain CORE -elements {.}\n```\n\nI have searched in tcl lan, but I couldn't find the explain.",
+        "accepted_answer": null,
+        "all_answers": null
+    },
+    {
         "title": "Xcelium simulator in endless loop using Tcl for/while",
         "question": "Could someone help me to understand why the below code hangs (i.e. stuck in an endless loop) in Xcelium simulator, and what should be the correct one?\n```\nfor {set i 0} {$i < 2} {incr $i} { puts \"i is $i\"; }\n```\n\n\n```\nset i 0\nwhile {$i < 2} { puts \"i is $i\"; incr $1; }\n```\n\nThe result for eitherfororwhileloop above is just an endless:i is 0",
         "accepted_answer": null,
@@ -113,6 +143,12 @@
         "question": "I am trying to write a SKILL script that replaces parts on a schematic given a csv file with the original part, and the desired replacement. So far I have looked through theIntro to Skill Programming. I only see information about file I/O and nothing, to my knowledge, that would allow the script to find and replace parts in the schematic.",
         "accepted_answer": "You should register on the Cadence support sitehttps://support.cadence.com/There is a lot of information and examples on the site.\nBelow is just an example of how to find and update instances in schematicprocedure(ATUpdateSchematicInstances(libName cellName viewName updateTable @optional (ignoreErrors nil))\n        let( (cvId instList instOldLib instOldCell key destLibName destCellName vicViewList instOldView updateResult errorInstList)\n            \n            cvId=dbOpenCellViewByType(libName cellName viewName \"schematic\" \"a\")\n            instList=cvId~>instHeaders\n            foreach(inst instList\n                instOldLib=inst->libName\n                instOldCell=inst->cellName\n                instOldView=inst->viewName\n    \n                key=ATCreateCellInfo(instOldLib instOldCell)\n    \n                when(updateTable[key]\n                    destLibName=updateTable[key]->libName\n                    destCellName=updateTable[key]->cellName\n                    \n                    updateResult=dbSetInstHeaderMasterName(inst destLibName destCellName instOldView)\n                );when\n            );foreach\n            \n            schCheck(cvId)\n            dbSave(cvId)\n            dbClose(cvId)\n        );let\n\n);procedure ATUpdateSchematicInstances",
         "all_answers": []
+    },
+    {
+        "title": "Can not change `ScheduleToStartTimeout `in cadence v0.11",
+        "question": "I'm using cadence v0.11.\nIt failed to changeScheduleToStartTimeoutin cadence v0.11.How to configScheduleToStartTimeouttake effect? Is it a bug for cadence 0.11?Here is the minimum bad case which is used to reproduce this bug:https://github.com/ahuigo/cadence-v11-bad-case",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Is there a quicker way to get workflowHistory",
@@ -137,6 +173,12 @@
         "all_answers": [
             "You should escape quote marks. See below\n```\nstrcat(\"grep -r \\\"RUN COMPLETED\\\" \" sumfile \" > out.txt\")\n```\n\n"
         ]
+    },
+    {
+        "title": "Cadence Question: what does # mean in below fomular: ((frame>>word(bit_index))&2#1?",
+        "question": "I'm reviewing some cadence test program and wondering what does # means in below formula:\nIt is to count the total 1 bit in frame data,\nThanks! Appreciate your time!\n```\ntotal_one_bit = 0\nfor bit_index = 0 to 15 do\n    total_one_bit = total_one_bit + ((frame>>word(bit_index))&2#1)\nendfor\n```\n\n",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "How to create workflows dynamically in cadence",
@@ -190,6 +232,12 @@
         "question": "I'm new to Genus, first time working with it.\nTo synthesisze my design I run a rather long .tcl script, which produces a way longer .log file.To make it easier for me to navigate the log, I would like to print a banner in certain specific points.\nHere's my try:\n```\nputs \" \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588    \u2588\u2588 \\n\"\nputs \" \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588   \u2588\u2588 \\n\"\nputs \" \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588      \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588 \u2588\u2588  \u2588\u2588 \\n\"\nputs \" \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588  \u2588\u2588 \u2588\u2588 \\n\"\nputs \" \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588    \u2588\u2588     \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588   \u2588\u2588 \u2588\u2588   \u2588\u2588\u2588\u2588 \\n\"\n```\n\nBut what I get is far from the expected:\n```\n@file(run_genus.tcl) 94: puts \" \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588    \u2588\u2588 \\n\" \n \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588    \u2588\u2588 \n\n@file(run_genus.tcl) 95: puts \" \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588   \u2588\u2588 \\n\" \n \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588   \u2588\u2588 \n\n@file(run_genus.tcl) 96: puts \" \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588      \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588 \u2588\u2588  \u2588\u2588 \\n\" \n \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588      \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588 \u2588\u2588  \u2588\u2588 \n\n@file(run_genus.tcl) 97: puts \" \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588  \u2588\u2588 \u2588\u2588 \\n\" \n \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588  \u2588\u2588 \u2588\u2588 \n\n@file(run_genus.tcl) 98: puts \" \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588    \u2588\u2588     \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588   \u2588\u2588 \u2588\u2588   \u2588\u2588\u2588\u2588 \\n\" \n \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588    \u2588\u2588     \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588   \u2588\u2588 \u2588\u2588   \u2588\u2588\u2588\u2588\n```\n\nGenus prints out each command and then executes it. This is useful, it allows for example to search for a specific command in the log file, but breaks multiline prints as the one I'm attempting.Does anyone know what is the proper way of doing what I'm trying to do here?",
         "accepted_answer": "You can do multiline strings in Tcl easily, provided you've enclosed the string in double quotes or braces.puts \"\\\n \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588 \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588    \u2588\u2588 \n \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588   \u2588\u2588 \n \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588\u2588\u2588\u2588      \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588 \u2588\u2588  \u2588\u2588 \n \u2588\u2588   \u2588\u2588 \u2588\u2588         \u2588\u2588    \u2588\u2588    \u2588\u2588 \u2588\u2588   \u2588\u2588 \u2588\u2588  \u2588\u2588 \u2588\u2588 \n \u2588\u2588   \u2588\u2588 \u2588\u2588\u2588\u2588\u2588\u2588\u2588    \u2588\u2588     \u2588\u2588\u2588\u2588\u2588\u2588  \u2588\u2588   \u2588\u2588 \u2588\u2588   \u2588\u2588\u2588\u2588 \\n\"I've been a bit tricky with the backslash on the first line so that the word also shows up in readable form in the source.",
         "all_answers": []
+    },
+    {
+        "title": "Automate Interactive session using script [closed]",
+        "question": "Closed. This question isopinion-based. It is not currently accepting answers.Want to improve this question?Update the question so it can be answered with facts and citations byediting this post.Closed3 years ago.Improve this questionI need to run interactive software in parallel to an another software.This interactive software (Cadence) runs on a separate terminal.Using Matlab, I want to invoke a csh script that gives certain commands to this interactive session, which is running in parallel.Basically, I am performing some computations using Matlab and the results of which are simulated from using this interactive software (Cadence).I am aware of the Matlab command 'system' that can be used to invoke a script.How, can I do it?\nAlso, if there is any alternate/shortcut method, please let me know.Thanks in advance.\nAksh",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Cadence workflow not executing activities after introducing versioning",
@@ -353,6 +401,12 @@
         "all_answers": []
     },
     {
+        "title": "Make HTTP request from Cadence SKILL program?",
+        "question": "Is it possible for Cadence SKILL code to make an HTTP request? If so, how?I have Googled and read the SKILL manuals I can find with no clear answer. I foundthis integration with a Python programwhich suggests that external programs can be called. If a scripting language (e.g. Python) or HTTP tool (e.g. curl) is installed, it seems a call to an HTTP endpoint / REST API might be possible though that external proxy. I am hoping for something more built-in and less dependent on external helpers and the vagaries of a three-party conversation. Is a direct HTTP request possible? How?",
+        "accepted_answer": null,
+        "all_answers": null
+    },
+    {
         "title": "How to make $display messages show up in SimVision console",
         "question": "I have to use the Cadence program suite to complete a Verilog class assignment and I'd like to know why$displaystatements in the very simple mock-testbench I have created do not produce output in the SimVision console window.My workflow goes like this:\nI have created a cell with the following functional view:\n```\nmodule tesbench ( );\n  initial begin\n    $display(\"RUNNING TESTBENCH\");\n    $finish;\n  end\nendmodule\n```\n\nI have then invoked NC-Verilog, initialized and netlisted and simulated the\ncell which opens the SimVision console window. Running the simulation then produces the following output:\n```\nncsim> run\nSimulation complete via $finish(1) at time 0 FS + 0\n/home/path/to/verilog/file.v:4      $finish;\nncsim>\n```\n\nSo$displayoutput is not shown. This seems like a very simple problem but I cannot for the life of me figure out what I'm doing wrong.",
         "accepted_answer": "Okay, so I have just been able to speak with an instructor and he told me that\nthis is a known problem with the installation and that there is currently no work-around (the programs are running on a server administrated by the university).",
@@ -380,6 +434,12 @@
         "all_answers": [
             "\n```\n;Copy list of cells\nprocedure(copycells(source_lib destination_lib)\nlet( ( cell_list old_cell new_cell call_name oldSpec newSpec specList destination_lib objId)\n    cell_list=list(\n        \"HV_driver_dc2dc_fb\" \"dc2dc\" \"dc2dc_comparator\" \"dc2dc_core\" \"dc2dc_fb_cap_divider\" \"dc2dc_hv_curr_src\" \"dc2dc_low_side_switch_logic\"\n        \"dc2dc_ls_iso\" \"dc2dc_ocp_comparator\" \"dc2dc_ref_voltage_selector\" \"dc2dc_switch_and_diode\" \"dc2dc_top\" \"dc2dc_tst_tg\"\n        \"dc2dc_vref_amp\" \"dc2dc_vref_preamp\" \"doubler\" \"doubler_aux_bottom_driver\" \"doubler_core\" \"doubler_main_bottom_driver\"\n        \"doubler_main_cap\" \"dcdc_tst_mux\" \"dcdc_t6_tst_mux_tg_esd\" \"dcdc_t6_tst_mux_tg\"\n    )\n\n    specList = gdmCreateSpecList();Speclist for rename reference library function\n\n    foreach(call_name cell_list\n        ;This part needed only for version control managed labraries\n        objId = ddGetObj( destination_lib call_name \"layout\" \"*\" );;Get objId for layout view\n\n        unless( objId\n            error( \"** Unable to get objId of %s %s layout\\n\" destination_lib call_name )\n        );unless\n        when( ddNeedCheckout(objId)  ;If ccheckout needed old commend ufIsObjectCheckedIn(objId)\n            printf(\"Checking out %s cellView of %s %s\\n \" \"layout\" destination_lib  call_name)\n\n            unless(ddCheckout(objId);Check out\n                error( \"** Unable to get check out %s %s %s\\n\" destination_lib  call_name \"layout\")\n            );unless\n        );when\n        ;check out end\n\n        old_cell = dbOpenCellViewByType( source_lib call_name \"layout\" );Source cell\n        unless(old_cell error(\"Unable to open old cell\"))\n        printf(\"Copy %s %s to %s %s\\n\" source_lib call_name destination_lib call_name)\n        new_cell= dbCopyCellView( old_cell destination_lib call_name \"layout\" nil nil t );Copy cell\n        unless(new_cell error(\"Unable to copy %s\" call_name))\n        dbClose(old_cell);Close old ce;;\n        dbClose(new_cell);Close new cell\n        gdmAddSpecToSpecList(gdmCreateSpecFromDDID(ddGetObj(destination_lib call_name \"layout\")) specList);Add cell to SPEC list\n    );foreach\n    oldSpec = gdmCreateSpec( source_lib \"\" \"\" \"\" \"CDBA\" );Spec of source lib\n    newSpec = gdmCreateSpec( destination_lib \"\" \"\" \"\" \"CDBA\" );Spec of destination lib\n    ccpRenameReferenceLib(oldSpec newSpec specList 'CCP_VALID_BOTH_REFS);Rename reference library for target cells\n);let );copycells\n```\n\n"
         ]
+    },
+    {
+        "title": "Ethernet eVC: Inject LPI with no normal IDLEs after packet",
+        "question": "I simply wanted to achieve this scenario in GMII:\n```\n_   _   _   _   _   _   _   _   \nTX_CLK  | |_| |_| |_| |_| |_| |_| |_| |_\n         ___________\nTX_EN               \\___________________\n         ___________ ___________________\nTX_D     ___________X_____0x01__________\n                     ___________________\nTX_ER    ___________/\n```\n\nNote the exact timing that LPI is initiated in the waveform above (no normal IDLEs after the packet ends). In the Ethernet eVC (version VIPCAT 11.30), I can't find in the available documentation (and anywhere else) how to control the LPI to be sent in that timing. It always waits for one cycle before it sends the LPI:\n```\n_   _   _   _   _   _   _   _   \nTX_CLK  | |_| |_| |_| |_| |_| |_| |_| |_\n         ___________\nTX_EN               \\___________________\n         ___________ ___________________\nTX_D     ___________X_____0x01__________\n                        ________________\nTX_ER    ______________/\n```\n\nAny idea how to do this as avr_enet_seq?",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Why mixed signal output only changes at 1ns,2ns,3ns ...?",
@@ -544,6 +604,12 @@
         "question": "I would like to run parallel multiple run ncverilog.Normally,  we use ncverilog run script like this.\n```\nRun.scr-\nncveriog blar~blar~\n```\n\nBut this is run at once. It means that if I want to run 100 scripts , I have to run new after previous script end. But I want to run at simultant 100 script.How do I run the scripts at simultant?",
         "accepted_answer": "UseGNU Parallelparallel ncverilog bla blaNormally, that will run as manyncverilogsin parallel as you have CPU cores, but you can add-j 25, for example, if you specifically want 25 to run in parallel.If you need to supply lots of different parameters, just make a loop or script that generates the parameters and feeds a list of jobs intoGNU Parallellike this:for i in {0..99}; do\n   echo ncverilog $i <and some other parameters>\ndone | parallel -j 25ExampleExampleDocumentation",
         "all_answers": []
+    },
+    {
+        "title": "zsh: command not found: \"ams_cds\"",
+        "question": "I am trying to get my Cadence Environment set up for designing my circuit. This is my first encounter with .zshrc files. I am working from my school server. I was instructed to run the commandzshfirst and then basically run this command:\n```\nams_cds -tech h35b4 -mode fb`\n```\n\n(specific to Cadence design kit). On running this, I get the following error:\n```\nzsh: command not found : ams_cds\n```\n\nI have been trying to resolve this \"command not found\" issue but have not succeded in doing so. Any help/guidance will be appreciated.Thanks a lot in advance.",
+        "accepted_answer": null,
+        "all_answers": null
     },
     {
         "title": "Wrong number of arguments for ::tcl::mathfunc::min in Cadence Encounter 14.2",
